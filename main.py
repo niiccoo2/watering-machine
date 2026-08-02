@@ -77,14 +77,14 @@ try:
             print(f"Done calcing avg moisture: {average_value}")
             past_data = []
 
-            if average_value < .32: # if under 32%
+            if average_value < .45: # if under x%
               if time.time() - last_water_time > 600: # if over ten mins from last water
 
                 # watering logic here
                 print("Watering now!")
 
                 pump.on()
-                time.sleep(5)
+                time.sleep(15)
                 pump.off()
 
                 send_message(PHONE_NUMBER, API_KEY, f"Watering plant because moisture is {average_value}")
