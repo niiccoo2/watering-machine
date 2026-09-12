@@ -13,8 +13,8 @@ SSID = secrets["ssid"]
 PASSWORD = secrets["password"]
 PHONE_NUMBER = secrets["phone_number"]
 API_KEY = secrets["callmebot_key"]
-DRY_VALUE = 56500
-WET_VALUE = 29000
+MAX_VALUE = 56500
+MIN_VALUE = 26500
 
 # Init Wi-Fi Interface
 def init_wifi(ssid, password):
@@ -67,8 +67,9 @@ try:
 
         while True:
           raw_value = moisture.read_u16()
+          moisture_value = ((52.15813)-(raw_value/1000))/(52.15813-27.71)*50
 
-          if raw_value < WET_VALUE or raw_value > DRY_VALUE:
+          if raw_value < MIN_VALUE or raw_value > MAX_VALUE:
             print(f"Raw value ({raw_value}) is out of range.")
             continue # if out of range: skip
 
@@ -77,7 +78,7 @@ try:
             print(f"Done calcing avg moisture: {average_value}")
             past_data = []
 
-            if average_value < .45: # if under x%
+            if average_value < 45: # if under x%
               if time.time() - last_water_time > 600: # if over ten mins from last water
 
                 # watering logic here
@@ -94,11 +95,9 @@ try:
                 print("Tried to water, but not enough time has passed.")
 
           else:
-            percentage = (raw_value-DRY_VALUE)/(WET_VALUE-DRY_VALUE)
+            past_data.append(moisture_value)
 
-            past_data.append(percentage)
-
-            print(percentage, raw_value)
+            print(moisture_value, raw_value)
 
           time.sleep(.2)
 
