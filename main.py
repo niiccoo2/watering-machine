@@ -78,7 +78,7 @@ try:
             print(f"Done calcing avg moisture: {average_value}")
             past_data = []
 
-            if average_value < 45: # if under x%
+            if average_value < 40: # if under x%
               if time.time() - last_water_time > 600: # if over ten mins from last water
 
                 # watering logic here
